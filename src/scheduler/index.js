@@ -1,8 +1,9 @@
 import cron from 'node-cron';
 import { runJob } from './runner.js';
-import { logger, getRandomTime } from './utils.js';
-import config from './config.js';
+import { logger, getRandomTime } from '../utils/index.js';
+import config from '../config/index.js';
 
+// Store active cron jobs
 let activeJobs = [];
 
 function scheduleJobs(numJobs) {
@@ -60,18 +61,12 @@ function scheduleJobs(numJobs) {
   }
 }
 
-/**
- * Clear all scheduled jobs
- */
 function clearJobs() {
   logger.info(`Clearing ${activeJobs.length} active jobs`);
   activeJobs.forEach(job => job.stop());
   activeJobs = [];
 }
 
-/**
- * Schedule daily jobs at midnight
- */
 function scheduleDailySetup() {
   // At midnight every day, schedule a random number of jobs for the day
   const midnightJob = cron.schedule('0 0 * * *', () => {
@@ -87,9 +82,6 @@ function scheduleDailySetup() {
   return midnightJob;
 }
 
-/**
- * Initial setup - schedule jobs for the current day
- */
 function init() {
   logger.info('Initializing scheduler');
   

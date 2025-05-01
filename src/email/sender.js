@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer';
-import config from './config.js';
-import { logger } from './utils.js';
+import config from '../config/index.js';
+import { logger } from '../utils/index.js';
 
+// Create a transporter for sending emails
 const transporter = nodemailer.createTransport({
   host: config.email.host,
   port: config.email.port,

@@ -1,6 +1,6 @@
-import { init } from './scheduler.js';
-import { runJob } from './runner.js';
-import { logger } from './utils.js';
+import { init } from './src/scheduler/index.js';
+import { runJob } from './src/scheduler/runner.js';
+import { logger } from './src/utils/index.js';
 
 async function start() {
   try {

@@ -1,18 +1,12 @@
 import winston from 'winston';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import config from './config.js';
-
-// Get current file path info (needed in ES modules)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import config from '../config/index.js';
 
 // Ensure logs directory exists
-const logsDir = path.join(__dirname, 'logs');
+const logsDir = config.logging.dir;
 if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir);
+  fs.mkdirSync(logsDir, { recursive: true });
 }
 
 // Create a date-based filename for logs

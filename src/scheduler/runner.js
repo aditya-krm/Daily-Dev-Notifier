@@ -1,7 +1,7 @@
-import prompts from './prompts.js';
-import { generateContent } from './geminiClient.js';
-import { sendEmail } from './sendMail.js';
-import { logger, getRandomItem, logEmailSent } from './utils.js';
+import prompts from '../config/prompts.js';
+import { generateContent } from '../api/gemini.js';
+import { sendEmail } from '../email/sender.js';
+import { logger, getRandomItem, logEmailSent } from '../utils/index.js';
 
 async function runJob() {
   try {
@@ -11,11 +11,11 @@ async function runJob() {
     const selectedPrompt = getRandomItem(prompts);
     logger.info(`Selected prompt: ${selectedPrompt.id} - ${selectedPrompt.title}`);
     
-    // Generate content using Gemini
-    const htmlContent = await generateContent(selectedPrompt.prompt);
+    // Generate content using Gemini - now returns {html, images}
+    const contentWithImages = await generateContent(selectedPrompt.prompt);
     
-    // Send email with the generated content
-    const result = await sendEmail(selectedPrompt.title, htmlContent);
+    // Send email with the generated content and images
+    const result = await sendEmail(selectedPrompt.title, contentWithImages);
     
     // Log the successful email
     logEmailSent(selectedPrompt, result.messageId);

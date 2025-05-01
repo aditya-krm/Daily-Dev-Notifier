@@ -1,10 +1,12 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import config from './config.js';
-import { logger } from './utils.js';
+import config from '../config/index.js';
+import { logger } from '../utils/index.js';
 
+// Initialize the Gemini API client
 const genAI = new GoogleGenerativeAI(config.gemini.apiKey);
 
 function processHtmlWithImages(htmlContent) {
+  // Array to store extracted images
   const images = [];
   
   // Find all base64 image tags
@@ -48,7 +50,7 @@ async function generateContent(promptText) {
     Please respond with well-formatted HTML content wrapped in <html><body>...</body></html> tags.
     Include appropriate styling to make the content look professional and readable in an email.
     
-    please dont make any images and dont send any images.make the content only text.`;
+    Do not include any images, base64 data, or other non-textual content. Focus solely on textual information.`;
     
     // Use Gemini-2.0-flash model for quick response
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
@@ -58,8 +60,7 @@ async function generateContent(promptText) {
       contents: [{ role: "user", parts: [{ text: enhancedPrompt }] }],
     });
     
-    const response = result.response;
-    // fs.writeFileSync('response.json', JSON.stringify(response, null, 2));
+    const response = await result.response;
     const rawHtml = response.text();
     
     // Process the HTML to handle base64 images
